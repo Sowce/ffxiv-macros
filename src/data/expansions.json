@@ -1,0 +1,9 @@
+{
+    "data": [
+        {"id":"EW", "name":"Endwalker", "level":90, "patch":"6.0"},
+        {"id":"ShB", "name":"Shadowbringers", "level":80, "patch":"5.0"},
+        {"id":"SB", "name":"Stormblood", "level":70, "patch":"4.0"},
+        {"id":"HW", "name":"Heanvesward", "level":60, "patch":"3.0"},
+        {"id":"ARR", "name":"A Realm Reborn", "level":50, "patch":"2.0"}
+    ]
+}

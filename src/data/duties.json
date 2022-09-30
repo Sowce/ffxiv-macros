@@ -1,0 +1,73 @@
+{
+  "data": [
+    {
+      "name": "The Minstrel's Ballad: Ultima's Bane",
+      "level": 50,
+      "type": "extreme"
+    },
+    { "name": "The Howling Eye", "level": 50, "type": "extreme" },
+    { "name": "The Navel", "level": 50, "type": "extreme" },
+    { "name": "The Bowl of Embers", "level": 50, "type": "extreme" },
+    { "name": "Thornmarch", "level": 50, "type": "extreme" },
+    { "name": "The Whorleater", "level": 50, "type": "extreme" },
+    { "name": "The Striking Tree", "level": 50, "type": "extreme" },
+    { "name": "The Ahk Afah Amphiteatre", "level": 50, "type": "extreme" },
+    { "name": "The Limitless Blue", "level": 60, "type": "extreme" },
+    { "name": "Thok ast Thok", "level": 60, "type": "extreme" },
+    {
+      "name": "The Minstrel's Ballad: Thordan's Reign",
+      "level": 60,
+      "type": "extreme"
+    },
+    {
+      "name": "The Minstrel's Ballad: Nidhogg's Rage",
+      "level": 60,
+      "type": "extreme"
+    },
+    { "name": "Containment Bay S1T7", "level": 60, "type": "extreme" },
+    { "name": "Containment Bay P1T6", "level": 60, "type": "extreme" },
+    { "name": "Containment Bay Z1T9", "level": 60, "type": "extreme" },
+    { "name": "The Pool of Tribute", "level": 70, "type": "extreme" },
+    { "name": "Emanation", "level": 70, "type": "extreme" },
+    {
+      "name": "The Minstrel's Ballad: Shinryu's Domain",
+      "level": 70,
+      "type": "extreme"
+    },
+    {
+      "name": "The Minstrel's Ballad: Tsukoyomi's Pain",
+      "level": 70,
+      "type": "extreme"
+    },
+    { "name": "The Great Hunt", "level": 70, "type": "extreme" },
+    { "name": "The Jade Stoa", "level": 70, "type": "extreme" },
+    { "name": "Hell's Kier", "level": 70, "type": "extreme" },
+    { "name": "The Wreath of Snakes", "level": 70, "type": "extreme" },
+    { "name": "The Dancing Plague", "level": 80, "type": "extreme" },
+    { "name": "The Crown of the Immaculate", "level": 80, "type": "extreme" },
+    {
+      "name": "The Minstrel's Ballad: Hades's Elegy",
+      "level": 80,
+      "type": "extreme"
+    },
+    { "name": "Cinder Drift", "level": 80, "type": "extreme" },
+    { "name": "Memoria Misera", "level": 80, "type": "extreme" },
+    { "name": "The Seat of Sacrifice", "level": 80, "type": "extreme" },
+    { "name": "Castrum Marinum", "level": 80, "type": "extreme" },
+    {
+      "name": "The Minstrel's Ballad: Zodiark's Fall",
+      "level": 90,
+      "type": "extreme"
+    },
+    {
+      "name": "The Minstrel's Ballad: Hydaelyne's Call",
+      "level": 90,
+      "type": "extreme"
+    },
+    {
+      "name": "The Minstrel's Ballad: Endsinger's Aria",
+      "level": 90,
+      "type": "extreme"
+    }
+  ]
+}

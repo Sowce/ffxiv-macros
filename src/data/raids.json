@@ -1,0 +1,84 @@
+{
+  "data": [
+    {
+      "name": "Alexander",
+      "level": 60,
+      "tiers": 3,
+      "shortName": "a",
+      "dutyNames": [
+        "The Fist of the Father",
+        "The Cuff of the Father",
+        "The Arm of the Father",
+        "The Burden of the Father",
+        "The Fist of the Son",
+        "The Cuff of the Son",
+        "The Arm of the Son",
+        "The Burden of the Son",
+        "The Eyes of the Creator",
+        "The Breath of the Creator",
+        "The Heart of the Creator",
+        "The Soul of the Creator"
+      ],
+      "tierNames": ["Gordias", "Midas", "The Creator"]
+    },
+    {
+      "name": "Omega",
+      "level": 70,
+      "tiers": 3,
+      "shortName": "o",
+      "dutyNames": [
+        "Deltasape V1.0",
+        "Deltasape V2.0",
+        "Deltasape V3.0",
+        "Deltasape V4.0",
+        "Sigmascape V1.0",
+        "Sigmascape V2.0",
+        "Sigmascape V3.0",
+        "Sigmascape V4.0",
+        "Alphascape V1.0",
+        "Alphascape V2.0",
+        "Alphascape V3.0",
+        "Alphascape V4.0"
+      ],
+      "tierNames": ["Deltasape", "Sigmascape", "Alphascape"]
+    },
+    {
+      "name": "Eden",
+      "level": 80,
+      "tiers": 3,
+      "shortName": "e",
+      "dutyNames": [
+        "Resurrection",
+        "Descent",
+        "Inundation",
+        "Sepulture",
+        "Fulmination",
+        "Furor",
+        "Iconoclasm",
+        "Refulgence",
+        "Umbra",
+        "Litany",
+        "Anamorphosis",
+        "Eternity"
+      ],
+      "tierNames": ["Eden's Gate", "Eden's Verse", "Eden's Promise"]
+    },
+    {
+      "name": "Pandaemonium",
+      "level": 90,
+      "tiers": 1,
+      "shortName": "p",
+      "dutyNames": [
+        "The First Circle",
+        "The Second Circle",
+        "The Third Circle",
+        "The Fourth Circle",
+        "The Fith Circle",
+        "The Sixth Circle",
+        "The Seventh Circle",
+        "The Eighth Circle"
+      ],
+      "tierNames": ["Asphodelos", "Abyssos"]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "data": [
+    { "id": "raid", "name": "Savage Raids" },
+    { "id": "ultimate", "name": "Ultimate Raids" },
+    { "id": "extreme", "name": "Extreme Trials" },
+    { "id": "unreal", "name": "Unreal Trials" }
+  ]
+}
