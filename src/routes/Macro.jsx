@@ -155,7 +155,7 @@ function Macro() {
     macroPreviewRef.current.scrollTop = macroEditorRef.current.scrollTop;
   });
 
-  const renderNewMacro = (macroCtn) => {
+  const renderNewMacro = (macroCtn, rules) => {
     let newMacro = macroCtn;
 
     // remove party text
@@ -209,7 +209,7 @@ function Macro() {
             <div style={{ position: "relative" }}>
               <Textarea
                 readOnly
-                value={memoRenderNewMacro(macroCtn)}
+                value={memoRenderNewMacro(macroCtn, rules)}
                 inputRef={macroPreviewRef}
                 overrides={macroEditorOverrides}
               />
