@@ -5,6 +5,7 @@ import { ArrowRight, Delete, Filter, Plus } from "baseui/icon";
 import { Input } from "baseui/input";
 import { Textarea } from "baseui/textarea";
 import { toaster, ToasterContainer } from "baseui/toast";
+import memoizeOne from "memoize-one";
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import Centered from "../commons/Centered";
 
@@ -154,7 +155,7 @@ function Macro() {
     macroPreviewRef.current.scrollTop = macroEditorRef.current.scrollTop;
   });
 
-  const renderNewMacro = () => {
+  const renderNewMacro = (macroCtn) => {
     let newMacro = macroCtn;
 
     // remove party text
@@ -177,6 +178,8 @@ function Macro() {
 
     return newMacro;
   };
+
+  const memoRenderNewMacro = memoizeOne(renderNewMacro);
 
   const CopyNewMacro = () => {
     macroPreviewRef.current.select();
@@ -206,7 +209,7 @@ function Macro() {
             <div style={{ position: "relative" }}>
               <Textarea
                 readOnly
-                value={renderNewMacro()}
+                value={memoRenderNewMacro(macroCtn)}
                 inputRef={macroPreviewRef}
                 overrides={macroEditorOverrides}
               />
