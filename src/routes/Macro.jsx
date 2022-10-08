@@ -77,7 +77,7 @@ const macroEditorOverrides = {
       overflowX: "normal",
       whiteSpace: "pre",
       overflowWrap: "normal",
-      width: "30em",
+      width: "30vw",
       height: "70vh",
     }),
   },
@@ -87,9 +87,7 @@ const SidePanel = styled("div", {
   display: "flex",
   flexDirection: "column",
   height: "100vh",
-  width: "30%",
-  minWidth: "450px",
-  paddingRight: "1em",
+  width: "20%",
 });
 
 const RuleBook = styled("div", {
@@ -159,6 +157,17 @@ function Macro() {
   const renderNewMacro = () => {
     let newMacro = macroCtn;
 
+    // remove party text
+    newMacro = newMacro.replace(
+      /^(\[[0-9]{2}:[0-9]{2}\])?\(. [A-z'\-]+ [A-z'\-]+\) /gim,
+      ""
+    );
+    // remove fc text
+    newMacro = newMacro.replace(
+      /^(\[[0-9]{2}:[0-9]{2}\])?\[[a-z0-9]+\]<.?[A-z'\-]+ [A-z'\-]+> /gim,
+      ""
+    );
+
     for (let rule of rules) {
       newMacro = newMacro.replace(
         new RegExp(rule.target, "g"),
@@ -182,16 +191,17 @@ function Macro() {
           <Centered
             style={{
               overflowY: "scroll",
-              paddingRight: "1em",
               flexDirection: "row",
             }}
           >
-            <Textarea
-              inputRef={macroEditorRef}
-              value={macroCtn}
-              onChange={(e) => setMacroCtn(e.target.value)}
-              overrides={macroEditorOverrides}
-            />
+            <div style={{ position: "relative" }}>
+              <Textarea
+                inputRef={macroEditorRef}
+                value={macroCtn}
+                onChange={(e) => setMacroCtn(e.target.value)}
+                overrides={macroEditorOverrides}
+              />
+            </div>
             <ArrowRight size={64} color="#ffffff" />
             <div style={{ position: "relative" }}>
               <Textarea
