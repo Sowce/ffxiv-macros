@@ -114,7 +114,24 @@ function Macro() {
   useEffect(() => {
     const savedRules = window.localStorage.getItem("rules");
     if (savedRules) setRules(JSON.parse(savedRules));
-    else setRules([{ target: "M1", replacement: "" }]);
+    else
+      setRules([
+        { target: "M1", replacement: "" },
+        { target: "M2", replacement: "" },
+        { target: "R1", replacement: "" },
+        { target: "R2", replacement: "" },
+        { target: "D1", replacement: "" },
+        { target: "D2", replacement: "" },
+        { target: "D3", replacement: "" },
+        { target: "D4", replacement: "" },
+        { target: "MT", replacement: "" },
+        { target: "OT", replacement: "" },
+        { target: "ST", replacement: "" },
+        { target: "H1", replacement: "" },
+        { target: "H2", replacement: "" },
+        { target: "G1", replacement: "" },
+        { target: "G2", replacement: "" },
+      ]);
 
     const macro = window.localStorage.getItem("macro");
     if (macro) setMacroCtn(macro);
@@ -181,10 +198,17 @@ function Macro() {
 
   const memoRenderNewMacro = memoizeOne(renderNewMacro);
 
-  const CopyNewMacro = () => {
-    macroPreviewRef.current.select();
-    document.execCommand("copy");
-    toaster.positive(<>Macro saved to clipboard.</>);
+  const CopyNewMacro = (macroIndex) => {
+    return () => {
+      const macroSlice = macroPreviewRef.current.value
+        .split(/\n/g)
+        .slice(0 + 14 * macroIndex, 14 * (macroIndex + 1))
+        .join("\n");
+      navigator.clipboard.writeText(macroSlice);
+      //   macroPreviewRef.current.select();
+      //   document.execCommand("copy");
+      toaster.positive(<>Macro saved to clipboard.</>);
+    };
   };
 
   return (
@@ -213,16 +237,31 @@ function Macro() {
                 inputRef={macroPreviewRef}
                 overrides={macroEditorOverrides}
               />
-              <Button
+
+              <div
                 style={{
+                  display: "flex",
+                  gap: "1em",
                   position: "absolute",
                   bottom: ".75em",
                   right: ".75em",
+                  width: "calc(100% - 1.5em)",
+                  flexFlow: "wrap-reverse",
                 }}
-                onClick={CopyNewMacro}
               >
-                Copy
-              </Button>
+                {new Array(
+                  Math.ceil(
+                    memoRenderNewMacro(macroCtn, rules).trim().match(/\n/gm)
+                      ?.length / 15
+                  ) | 0
+                )
+                  .fill()
+                  .map((_, i) => (
+                    <Button key={i} onClick={CopyNewMacro(i)}>
+                      Copy Macro {i + 1}
+                    </Button>
+                  ))}
+              </div>
             </div>
           </Centered>
           <SidePanel>
