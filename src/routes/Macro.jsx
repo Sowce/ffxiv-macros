@@ -200,13 +200,12 @@ function Macro() {
 
   const CopyNewMacro = (macroIndex) => {
     return () => {
-      const macroSlice = macroPreviewRef.current.value
-        .split(/\n/g)
-        .slice(0 + 14 * macroIndex, 14 * (macroIndex + 1))
-        .join("\n");
-      navigator.clipboard.writeText(macroSlice);
-      //   macroPreviewRef.current.select();
-      //   document.execCommand("copy");
+      navigator.clipboard.writeText(
+        macroPreviewRef.current.value
+          .split(/\n/g)
+          .slice(0 + 14 * macroIndex, 14 * (macroIndex + 1))
+          .join("\n")
+      );
       toaster.positive(<>Macro saved to clipboard.</>);
     };
   };
@@ -245,8 +244,8 @@ function Macro() {
                   position: "absolute",
                   bottom: ".75em",
                   right: ".75em",
-                  width: "calc(100% - 1.5em)",
-                  flexFlow: "wrap-reverse",
+                  maxWidth: "calc(100% - 1.5em)",
+                  flexFlow: "wrap",
                 }}
               >
                 {new Array(
