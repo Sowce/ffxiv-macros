@@ -242,7 +242,7 @@ function Macro() {
                   display: "flex",
                   gap: "1em",
                   position: "absolute",
-                  bottom: ".75em",
+                  bottom: "-14px",
                   right: ".75em",
                   maxWidth: "calc(100% - 1.5em)",
                   flexFlow: "wrap",
@@ -257,7 +257,7 @@ function Macro() {
                   .fill()
                   .map((_, i) => (
                     <Button key={i} onClick={CopyNewMacro(i)}>
-                      Copy Macro {i + 1}
+                      Macro {i + 1}
                     </Button>
                   ))}
               </div>
