@@ -4,6 +4,8 @@ import Expansion from "./routes/Expansion";
 import Macro from "./routes/Macro";
 import RaidList from "./routes/RaidList";
 
+import "./App.css";
+
 function App() {
   return (
     <div className="App">

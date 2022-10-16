@@ -1,0 +1,12 @@
+.fancyScroll {
+  scroll-behavior: smooth;
+}
+
+.fancyScroll::-webkit-scrollbar-thumb, textarea::-webkit-scrollbar-thumb {
+  background: #666;
+  border-radius: 20px;
+}
+
+.fancyScroll::-webkit-scrollbar, textarea::-webkit-scrollbar {
+  width: 7.5px;
+}

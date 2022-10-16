@@ -69,7 +69,15 @@ const CharWidget = ({
   );
 };
 
+const MacroEditorContainer = styled("div", {
+  position: "relative",
+  padding: "0px 2.5px 10px 2.5px",
+  height: "calc(100% - 10px)",
+  flexGrow: 1,
+});
+
 const macroEditorOverrides = {
+  Root: { style: () => ({ height: "100%" }) },
   Input: {
     style: () => ({
       fontFamily: "Noto Sans, Myriad Pro, FFXIV", // ＭＳ Ｐゴシック,
@@ -78,9 +86,10 @@ const macroEditorOverrides = {
       overflowX: "normal",
       whiteSpace: "pre",
       overflowWrap: "normal",
-      width: "30vw",
-      height: "70vh",
+      height: "100%",
+      //   height: "calc(100vh - 14px)",
     }),
+    className: () => "fancyScroll"
   },
 };
 
@@ -88,13 +97,14 @@ const SidePanel = styled("div", {
   display: "flex",
   flexDirection: "column",
   height: "100vh",
-  width: "20%",
+  minWidth: "20vw",
+  width: "20vw",
 });
 
 const RuleBook = styled("div", {
   display: "flex",
   flexDirection: "column",
-  overflowY: "scroll",
+  overflowY: "auto",
 });
 const RuleLine = styled("div", { display: "flex", marginBottom: ".5em" });
 
@@ -214,40 +224,29 @@ function Macro() {
     <Fragment>
       <ToasterContainer autoHideDuration={2500} closeable={false}>
         <Centered style={{ justifyContent: "space-evenly" }}>
-          <Centered
+          <div
             style={{
-              overflowY: "scroll",
-              flexDirection: "row",
+              flexDirection: "column",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexGrow: 1,
+              height: "100vh",
             }}
           >
-            <div style={{ position: "relative" }}>
-              <Textarea
-                inputRef={macroEditorRef}
-                value={macroCtn}
-                onChange={(e) => setMacroCtn(e.target.value)}
-                overrides={macroEditorOverrides}
-              />
-            </div>
-            <ArrowRight size={64} color="#ffffff" />
-            <div style={{ position: "relative" }}>
-              <Textarea
-                readOnly
-                value={memoRenderNewMacro(macroCtn, rules)}
-                inputRef={macroPreviewRef}
-                overrides={macroEditorOverrides}
-              />
-
+            <HeadingLevel>
               <div
                 style={{
                   display: "flex",
-                  gap: "1em",
-                  position: "absolute",
-                  bottom: "-14px",
-                  right: ".75em",
-                  maxWidth: "calc(100% - 1.5em)",
-                  flexFlow: "wrap",
+                  gap: ".5em",
+                  flexDirection: "row",
+                  width: "100%",
+                  paddingLeft: "1em",
+                  width: "calc(100% - 2em)",
+                  alignItems: "center",
                 }}
               >
+                <Heading>people will put dumb names here</Heading>
                 {new Array(
                   Math.ceil(
                     memoRenderNewMacro(macroCtn, rules).trim().match(/\n/gm)
@@ -256,16 +255,55 @@ function Macro() {
                 )
                   .fill()
                   .map((_, i) => (
-                    <Button key={i} onClick={CopyNewMacro(i)}>
-                      Macro {i + 1}
+                    <Button
+                      key={i}
+                      onClick={CopyNewMacro(i)}
+                      style={{ height: "2.5em", marginTop: "11px" }}
+                    >
+                      Copy Macro {i + 1}
                     </Button>
                   ))}
               </div>
+            </HeadingLevel>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "row",
+                width: "100%",
+                flexGrow: 1,
+                marginTop: "2.8px",
+              }}
+            >
+              <MacroEditorContainer>
+                <Textarea
+                  className="fancyScroll"
+                  inputRef={macroEditorRef}
+                  value={macroCtn}
+                  onChange={(e) => setMacroCtn(e.target.value)}
+                  overrides={macroEditorOverrides}
+                />
+              </MacroEditorContainer>
+              <ArrowRight
+                size={64}
+                color="#ffffff"
+                style={{ position: "fixed", zIndex: "1" }}
+              />
+              <MacroEditorContainer>
+                <Textarea
+                  className="fancyScroll"
+                  readOnly
+                  value={memoRenderNewMacro(macroCtn, rules)}
+                  inputRef={macroPreviewRef}
+                  overrides={macroEditorOverrides}
+                />
+              </MacroEditorContainer>
             </div>
-          </Centered>
+          </div>
           <SidePanel>
             <HeadingLevel>
-              <Heading>
+              <Heading style={{ paddingLeft: ".5em", paddingRight: ".5em" }}>
                 <Filter size={25} /> Rules ({rules.length})
                 <Button
                   shape="circle"
@@ -276,7 +314,7 @@ function Macro() {
                 </Button>
               </Heading>
             </HeadingLevel>
-            <RuleBook ref={ruleBookRef}>
+            <RuleBook className="fancyScroll" ref={ruleBookRef}>
               {rules.map((rule, ruleIndex) => (
                 <RuleLine key={ruleIndex}>
                   <Input
