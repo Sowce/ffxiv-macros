@@ -71,8 +71,8 @@ const CharWidget = ({
 
 const MacroEditorContainer = styled("div", {
   position: "relative",
-  padding: "0px 2.5px 10px 2.5px",
-  height: "calc(100% - 10px)",
+  padding: "0px 2.5px 5px 2.5px",
+  height: "calc(100% - 5px)",
   flexGrow: 1,
 });
 
@@ -87,7 +87,6 @@ const macroEditorOverrides = {
       whiteSpace: "pre",
       overflowWrap: "normal",
       height: "100%",
-      //   height: "calc(100vh - 14px)",
     }),
     className: () => "fancyScroll"
   },
