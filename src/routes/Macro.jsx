@@ -88,7 +88,7 @@ const macroEditorOverrides = {
       overflowWrap: "normal",
       height: "100%",
     }),
-    className: () => "fancyScroll"
+    className: () => "fancyScroll",
   },
 };
 
@@ -186,7 +186,7 @@ function Macro() {
 
     // remove party text
     newMacro = newMacro.replace(
-      /^(\[[0-9]{2}:[0-9]{2}\])?\(. [A-z'\-]+ [A-z'\-]+\) /gim,
+      /^(\[[0-9]{2}:[0-9]{2}\])?\(. ?[A-z'\-]+ [A-z'\-]+\) /gim,
       ""
     );
     // remove fc text
