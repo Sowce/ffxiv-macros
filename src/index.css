@@ -5,11 +5,11 @@
 
 @font-face {
   font-family: "Noto Sans";
-  src: url("NotoSansCJKjp-Regular.otf");
+  src: url("@/assets/NotoSansCJKjp-Regular.otf");
 }
 
 :root {
-  font-family: ＭＳ Ｐゴシック, FFXIV;
+  font-family: Noto Sans, ＭＳ Ｐゴシック, FFXIV;
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
