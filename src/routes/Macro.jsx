@@ -287,7 +287,11 @@ function Macro() {
               <ArrowRight
                 size={64}
                 color="#ffffff"
-                style={{ position: "fixed", zIndex: "1" }}
+                style={{
+                  position: "absolute",
+                  zIndex: "1",
+                  transform: "translateX(-25px)",
+                }}
               />
               <MacroEditorContainer>
                 <Textarea
