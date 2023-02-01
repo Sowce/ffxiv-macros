@@ -111,7 +111,6 @@ const CharWidget = ({
 
 const MacroEditorContainer = styled("div", {
   position: "relative",
-  padding: "0px 2.5px 5px 2.5px",
   padding: "1em 1em",
   boxSizing: "border-box",
   flexGrow: 1,
@@ -351,7 +350,7 @@ function Macro() {
                     "0 0 10px rgba(20,20,20,1), 0px 0px 10px rgba(20,20,20,1)",
                 }}
               >
-                p8s hyper zoomer strat
+                p8s left my zoom at home
               </p>
             </div>
             <MacroEditorContainer
