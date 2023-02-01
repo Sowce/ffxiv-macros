@@ -1,13 +1,52 @@
 import { styled } from "baseui";
 import { Button, KIND, SHAPE, SIZE } from "baseui/button";
 import { Heading, HeadingLevel } from "baseui/heading";
-import { ArrowRight, Delete, Filter, Plus } from "baseui/icon";
+import { ArrowRight, Check, Delete, Filter, Plus } from "baseui/icon";
 import { Input } from "baseui/input";
 import { Textarea } from "baseui/textarea";
 import { toaster, ToasterContainer } from "baseui/toast";
 import memoizeOne from "memoize-one";
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import Centered from "../commons/Centered";
+
+const rulePresetsBase = [
+  {
+    id: "eastern-roles",
+    name: "Roles (Eastern Style)",
+    rules: [
+      { target: "M1", replacement: "" },
+      { target: "M2", replacement: "" },
+      { target: "R1", replacement: "" },
+      { target: "R2", replacement: "" },
+      { target: "MT", replacement: "" },
+      { target: "OT", replacement: "" },
+      { target: "H1", replacement: "" },
+      { target: "H2", replacement: "" },
+    ],
+  },
+  {
+    id: "jp-roles",
+    name: "Roles (JP Style)",
+    rules: [
+      { target: "D1", replacement: "" },
+      { target: "D2", replacement: "" },
+      { target: "D3", replacement: "" },
+      { target: "D4", replacement: "" },
+      { target: "MT", replacement: "" },
+      { target: "ST", replacement: "" },
+      { target: "H1", replacement: "" },
+      { target: "H2", replacement: "" },
+    ],
+  },
+  {
+    id: "light-parties",
+    name: "Light Parties",
+    rules: [
+      { target: "G1", replacement: "" },
+      { target: "G2", replacement: "" },
+    ],
+  },
+];
 
 const SpecialChracterButton = (props) => {
   const ingameFontButtonStyle = {
@@ -98,12 +137,15 @@ const SidePanel = styled("div", {
   height: "100vh",
   minWidth: "20vw",
   width: "20vw",
+  backgroundColor: "#202020",
+  padding: "0em 1em",
 });
 
 const RuleBook = styled("div", {
   display: "flex",
   flexDirection: "column",
   overflowY: "auto",
+  paddingRight: ".3em",
 });
 const RuleLine = styled("div", { display: "flex", marginBottom: ".5em" });
 
@@ -118,66 +160,79 @@ function Macro() {
         /> */
   }
   const [macroCtn, setMacroCtn] = useState("");
-  const [rules, setRules] = useState([]);
+  const [customRules, setCustomRules] = useState([]);
+  const [rulePresets, setRulePresets] = useState([]);
 
   useEffect(() => {
     const savedRules = window.localStorage.getItem("rules");
-    if (savedRules) setRules(JSON.parse(savedRules));
-    else
-      setRules([
-        { target: "M1", replacement: "" },
-        { target: "M2", replacement: "" },
-        { target: "R1", replacement: "" },
-        { target: "R2", replacement: "" },
-        { target: "D1", replacement: "" },
-        { target: "D2", replacement: "" },
-        { target: "D3", replacement: "" },
-        { target: "D4", replacement: "" },
-        { target: "MT", replacement: "" },
-        { target: "OT", replacement: "" },
-        { target: "ST", replacement: "" },
-        { target: "H1", replacement: "" },
-        { target: "H2", replacement: "" },
-        { target: "G1", replacement: "" },
-        { target: "G2", replacement: "" },
-      ]);
+    if (savedRules) setCustomRules(JSON.parse(savedRules));
+    else setCustomRules([]);
 
     const macro = window.localStorage.getItem("macro");
     if (macro) setMacroCtn(macro);
+
+    const savedRulePresets = window.localStorage.getItem("presets");
+    if (savedRulePresets) {
+      setRulePresets(
+        rulePresetsBase.map((rulePreset) => ({
+          ...rulePreset,
+          used: savedRulePresets.includes(rulePreset.id),
+        }))
+      );
+    } else {
+      setRulePresets(
+        rulePresetsBase.map((rulePreset) => ({
+          ...rulePreset,
+          used: false,
+        }))
+      );
+    }
   }, []);
 
   useEffect(() => {
-    if (rules.length < 1) return;
-    window.localStorage.setItem("rules", JSON.stringify(rules));
-  }, [rules]);
+    if (customRules.length < 1) return;
+    window.localStorage.setItem("rules", JSON.stringify(customRules));
+  }, [customRules]);
 
   useEffect(() => {
-    if (rules.length < 1) return;
+    if (rulePresets.length < 1) return;
+    window.localStorage.setItem(
+      "presets",
+      JSON.stringify(
+        rulePresets
+          .filter((rulePreset) => rulePreset.used)
+          .map((rulePreset) => rulePreset.id)
+      )
+    );
+  }, [rulePresets]);
+
+  useEffect(() => {
+    if (customRules.length < 1) return;
     window.localStorage.setItem("macro", macroCtn);
   }, [macroCtn]);
 
   const addNewRule = () => {
-    setRules([...rules, { target: "", replacement: "" }]);
+    setCustomRules([...customRules, { target: "", replacement: "" }]);
     setTimeout(() => {
       ruleBookRef.current.scrollTop = ruleBookRef.current.scrollHeight;
     }, 10);
   };
 
   const deleteRule = (index) => {
-    setRules(rules.filter((_, ruleIndex) => ruleIndex !== index));
+    setCustomRules(customRules.filter((_, ruleIndex) => ruleIndex !== index));
   };
 
   const updateRuleValue = (index, update) => {
-    const newRules = [...rules];
+    const newRules = [...customRules];
     newRules[index] = { ...newRules[index], ...update };
-    setRules(newRules);
+    setCustomRules(newRules);
   };
 
   const macroEditorRef = useRef();
   const macroPreviewRef = useRef();
   const ruleBookRef = useRef();
 
-  const renderNewMacro = (macroCtn, rules) => {
+  const renderNewMacro = (macroCtn, customRules, rulePresets) => {
     let newMacro = macroCtn;
 
     // remove party text
@@ -191,7 +246,19 @@ function Macro() {
       ""
     );
 
-    for (let rule of rules) {
+    const customRulesCopy = [
+      ...rulePresets
+        .map((rulePreset) => rulePreset.rules)
+        .reduce(
+          (accumulator, currentValue) => accumulator.concat(currentValue),
+          []
+        ),
+      ...customRules,
+    ];
+
+    console.log(customRulesCopy);
+
+    for (let rule of customRulesCopy) {
       newMacro = newMacro.replace(
         new RegExp(rule.target, "g"),
         rule.replacement
@@ -226,9 +293,19 @@ function Macro() {
       top: macroEditorRef.current.scrollTop + event.deltaY,
       behavior: "smooth",
     });
-    console.log(event.deltaY);
-    //   macroEditorRef.current.scroll();
   });
+
+  function toggleRulePreset(rulePresetID) {
+    return function () {
+      setRulePresets([
+        ...rulePresets.map((rulePreset) =>
+          rulePreset.id === rulePresetID
+            ? { ...rulePreset, used: !rulePreset.used }
+            : rulePreset
+        ),
+      ]);
+    };
+  }
 
   return (
     <Fragment>
@@ -258,8 +335,9 @@ function Macro() {
                 <Heading>people will put dumb names here</Heading>
                 {new Array(
                   Math.ceil(
-                    memoRenderNewMacro(macroCtn, rules).trim().match(/\n/gm)
-                      ?.length / 15
+                    memoRenderNewMacro(macroCtn, customRules, rulePresets)
+                      .trim()
+                      .match(/\n/gm)?.length / 15
                   ) | 0
                 )
                   .fill()
@@ -307,7 +385,7 @@ function Macro() {
                 <Textarea
                   className="fancyScroll"
                   readOnly
-                  value={memoRenderNewMacro(macroCtn, rules)}
+                  value={memoRenderNewMacro(macroCtn, customRules, rulePresets)}
                   inputRef={macroPreviewRef}
                   overrides={macroEditorOverrides}
                 />
@@ -315,20 +393,46 @@ function Macro() {
             </div>
           </div>
           <SidePanel>
-            <HeadingLevel>
-              <Heading style={{ paddingLeft: ".5em", paddingRight: ".5em" }}>
-                <Filter size={25} /> Rules ({rules.length})
+            <p
+              style={{
+                paddingLeft: ".5em",
+                paddingRight: ".5em",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "rgb(255,255,255)",
+              }}
+            >
+              <Filter size={30} /> Rule Presets
+            </p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: ".5em" }}>
+              {rulePresets.map((rulePreset) => (
                 <Button
-                  shape="circle"
-                  onClick={addNewRule}
-                  style={{ marginLeft: "1em" }}
+                  isSelected={rulePreset.used}
+                  onClick={toggleRulePreset(rulePreset.id)}
+                  key={rulePreset.id}
                 >
-                  <Plus size={24} />
+                  {rulePreset.used && <Check />} {rulePreset.name}
                 </Button>
-              </Heading>
-            </HeadingLevel>
+              ))}
+            </div>
+            <p
+              style={{
+                paddingLeft: ".5em",
+                paddingRight: ".5em",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "rgb(255,255,255)",
+              }}
+            >
+              <Filter size={30} /> Custom Rules ({customRules.length})
+              <Button onClick={addNewRule} style={{ marginLeft: "1em" }}>
+                <Plus size={24} />
+              </Button>
+            </p>
             <RuleBook className="fancyScroll" ref={ruleBookRef}>
-              {rules.map((rule, ruleIndex) => (
+              {customRules.map((rule, ruleIndex) => (
                 <RuleLine key={ruleIndex}>
                   <Input
                     value={rule.target}
