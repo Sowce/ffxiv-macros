@@ -177,10 +177,6 @@ function Macro() {
   const macroPreviewRef = useRef();
   const ruleBookRef = useRef();
 
-  macroEditorRef.current?.addEventListener("scroll", () => {
-    macroPreviewRef.current.scrollTop = macroEditorRef.current.scrollTop;
-  });
-
   const renderNewMacro = (macroCtn, rules) => {
     let newMacro = macroCtn;
 
@@ -219,6 +215,21 @@ function Macro() {
     };
   };
 
+  macroEditorRef.current?.addEventListener("scroll", () => {
+    macroPreviewRef.current.scrollTop = macroEditorRef.current.scrollTop;
+  });
+
+  macroPreviewRef.current?.addEventListener("wheel", (event) => {
+    event.preventDefault();
+
+    macroEditorRef.current.scroll({
+      top: macroEditorRef.current.scrollTop + event.deltaY,
+      behavior: "smooth",
+    });
+    console.log(event.deltaY);
+    //   macroEditorRef.current.scroll();
+  });
+
   return (
     <Fragment>
       <ToasterContainer autoHideDuration={2500} closeable={false}>
@@ -239,7 +250,6 @@ function Macro() {
                   display: "flex",
                   gap: ".5em",
                   flexDirection: "row",
-                  width: "100%",
                   paddingLeft: "1em",
                   width: "calc(100% - 2em)",
                   alignItems: "center",
