@@ -10,7 +10,7 @@ import "./index.css";
 const engine = new Styletron({});
 const DarkTheme = createDarkTheme(
   {
-    primaryFontFamily:"FFXIV, Noto Sans, Myriad Pro"
+    primaryFontFamily: "FFXIV, Noto Sans, Myriad Pro",
   },
   {
     colors: {

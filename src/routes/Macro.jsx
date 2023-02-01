@@ -1,7 +1,8 @@
+import { faCopy } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { styled } from "baseui";
 import { Button, KIND, SHAPE, SIZE } from "baseui/button";
-import { Heading, HeadingLevel } from "baseui/heading";
-import { ArrowRight, Check, Delete, Filter, Plus } from "baseui/icon";
+import { Check, Delete, Filter, Plus } from "baseui/icon";
 import { Input } from "baseui/input";
 import { Textarea } from "baseui/textarea";
 import { toaster, ToasterContainer } from "baseui/toast";
@@ -111,12 +112,13 @@ const CharWidget = ({
 const MacroEditorContainer = styled("div", {
   position: "relative",
   padding: "0px 2.5px 5px 2.5px",
-  height: "calc(100% - 5px)",
+  padding: "1em 1em",
+  boxSizing: "border-box",
   flexGrow: 1,
 });
 
 const macroEditorOverrides = {
-  Root: { style: () => ({ height: "100%" }) },
+  Root: { style: () => ({ height: "100%", borderRadius: "8px" }) },
   Input: {
     style: () => ({
       fontFamily: "Noto Sans, Myriad Pro, FFXIV", // ＭＳ Ｐゴシック,
@@ -145,9 +147,13 @@ const RuleBook = styled("div", {
   display: "flex",
   flexDirection: "column",
   overflowY: "auto",
-  paddingRight: ".3em",
+  padding: "0em .3em",
 });
-const RuleLine = styled("div", { display: "flex", marginBottom: ".5em" });
+const RuleLine = styled("div", {
+  display: "flex",
+  marginBottom: ".5em",
+  gap: ".5em",
+});
 
 function Macro() {
   {
@@ -190,7 +196,8 @@ function Macro() {
   }, []);
 
   useEffect(() => {
-    if (customRules.length < 1) return;
+    if (customRules.length < 1)
+      return window.localStorage.setItem("rules", JSON.stringify([]));
     window.localStorage.setItem("rules", JSON.stringify(customRules));
   }, [customRules]);
 
@@ -219,6 +226,7 @@ function Macro() {
   };
 
   const deleteRule = (index) => {
+    if (customRules.length === 1) return setCustomRules([]);
     setCustomRules(customRules.filter((_, ruleIndex) => ruleIndex !== index));
   };
 
@@ -248,6 +256,7 @@ function Macro() {
 
     const customRulesCopy = [
       ...rulePresets
+        .filter((rulePreset) => rulePreset.used)
         .map((rulePreset) => rulePreset.rules)
         .reduce(
           (accumulator, currentValue) => accumulator.concat(currentValue),
@@ -255,8 +264,6 @@ function Macro() {
         ),
       ...customRules,
     ];
-
-    console.log(customRulesCopy);
 
     for (let rule of customRulesCopy) {
       newMacro = newMacro.replace(
@@ -313,66 +320,52 @@ function Macro() {
         <Centered style={{ justifyContent: "space-evenly" }}>
           <div
             style={{
-              flexDirection: "column",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              display: "grid",
+              gridTemplateColumns: "repear(2, 1fr)",
+              gridTemplateRows: "1fr 8fr",
               flexGrow: 1,
               height: "100vh",
+              backgroundImage:
+                "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 7%, rgba(20,20,20,1) 20%, rgba(20,20,20,1) 100%), url(https://salted.saltedxiv.com/uploads/2022/09/ffxiv_09022022_164425_564.jpg)",
+              backgroundPosition: "center",
             }}
           >
-            <HeadingLevel>
-              <div
-                style={{
-                  display: "flex",
-                  gap: ".5em",
-                  flexDirection: "row",
-                  paddingLeft: "1em",
-                  width: "calc(100% - 2em)",
-                  alignItems: "center",
-                }}
-              >
-                <Heading>people will put dumb names here</Heading>
-                {new Array(
-                  Math.ceil(
-                    memoRenderNewMacro(macroCtn, customRules, rulePresets)
-                      .trim()
-                      .match(/\n/gm)?.length / 15
-                  ) | 0
-                )
-                  .fill()
-                  .map((_, i) => (
-                    <Button
-                      key={i}
-                      onClick={CopyNewMacro(i)}
-                      style={{ height: "2.5em", marginTop: "11px" }}
-                    >
-                      Copy Macro {i + 1}
-                    </Button>
-                  ))}
-              </div>
-            </HeadingLevel>
             <div
               style={{
+                gridArea: "1 / 1 / 2 / 3",
                 display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "row",
-                width: "100%",
-                flexGrow: 1,
-                marginTop: "2.8px",
+                flexDirection: "column",
+                padding: "0em 1em",
+                boxSizing: "border-box",
+                justifyContent: "end",
               }}
             >
-              <MacroEditorContainer>
-                <Textarea
-                  className="fancyScroll"
-                  inputRef={macroEditorRef}
-                  value={macroCtn}
-                  onChange={(e) => setMacroCtn(e.target.value)}
-                  overrides={macroEditorOverrides}
-                />
-              </MacroEditorContainer>
-              <ArrowRight
+              <p
+                style={{
+                  textTransform: "uppercase",
+                  fontSize: "40px",
+                  fontWeight: "500",
+                  color: "white",
+                  margin: "0px",
+                  textShadow:
+                    "0 0 10px rgba(20,20,20,1), 0px 0px 10px rgba(20,20,20,1)",
+                }}
+              >
+                p8s hyper zoomer strat
+              </p>
+            </div>
+            <MacroEditorContainer
+              style={{ gridArea: "2 / 1 / 3 / 2", paddingRight: ".5em" }}
+            >
+              <Textarea
+                className="fancyScroll"
+                inputRef={macroEditorRef}
+                value={macroCtn}
+                onChange={(e) => setMacroCtn(e.target.value)}
+                overrides={macroEditorOverrides}
+              />
+            </MacroEditorContainer>
+            {/* <ArrowRight
                 size={64}
                 color="#ffffff"
                 style={{
@@ -380,19 +373,52 @@ function Macro() {
                   zIndex: "1",
                   transform: "translateX(-25px)",
                 }}
+              /> */}
+            <MacroEditorContainer
+              style={{ gridArea: "2 / 2 / 3 / 3", paddingLeft: ".5em" }}
+            >
+              <Textarea
+                className="fancyScroll"
+                readOnly
+                value={memoRenderNewMacro(macroCtn, customRules, rulePresets)}
+                inputRef={macroPreviewRef}
+                overrides={macroEditorOverrides}
               />
-              <MacroEditorContainer>
-                <Textarea
-                  className="fancyScroll"
-                  readOnly
-                  value={memoRenderNewMacro(macroCtn, customRules, rulePresets)}
-                  inputRef={macroPreviewRef}
-                  overrides={macroEditorOverrides}
-                />
-              </MacroEditorContainer>
-            </div>
+            </MacroEditorContainer>
           </div>
           <SidePanel>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
+                gap: ".5em",
+                justifyContent: "center",
+              }}
+            >
+              {new Array(
+                Math.ceil(
+                  memoRenderNewMacro(macroCtn, customRules, rulePresets)
+                    .trim()
+                    .match(/\n/gm)?.length / 15
+                ) | 0
+              )
+                .fill()
+                .map((_, i) => (
+                  <Button
+                    key={i}
+                    onClick={CopyNewMacro(i)}
+                    style={{ height: "2.5em", marginTop: "11px" }}
+                    startEnhancer={() => <FontAwesomeIcon icon={faCopy} />}
+                    title={`Copy Macro #${i + 1}`}
+                  >
+                    {i + 1}
+                  </Button>
+                ))}
+            </div>
+            <div
+              style={{ borderBottom: "1px solid #333", padding: "0.5em 0em" }}
+            ></div>
             <p
               style={{
                 paddingLeft: ".5em",
@@ -411,15 +437,33 @@ function Macro() {
                   isSelected={rulePreset.used}
                   onClick={toggleRulePreset(rulePreset.id)}
                   key={rulePreset.id}
+                  title={`Replaces ${rulePreset.rules
+                    .map((rule) => rule.target)
+                    .join(", ")}`}
+                  overrides={{
+                    BaseButton: {
+                      style: () => ({
+                        flexGrow: "1",
+                      }),
+                    },
+                  }}
                 >
-                  {rulePreset.used && <Check />} {rulePreset.name}
+                  {rulePreset.used && (
+                    <Check style={{ paddingRight: "1vmin" }} />
+                  )}
+                  {rulePreset.name}
                 </Button>
               ))}
             </div>
+            <div
+              style={{ borderBottom: "1px solid #333", padding: "0.5em 0em" }}
+            ></div>
             <p
               style={{
                 paddingLeft: ".5em",
                 paddingRight: ".5em",
+                paddingTop: ".5em",
+                paddingBottom: "0.3em",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -427,7 +471,14 @@ function Macro() {
               }}
             >
               <Filter size={30} /> Custom Rules ({customRules.length})
-              <Button onClick={addNewRule} style={{ marginLeft: "1em" }}>
+              <Button
+                onClick={addNewRule}
+                style={{
+                  marginLeft: "1em",
+                  position: "absolute",
+                  right: "1em",
+                }}
+              >
                 <Plus size={24} />
               </Button>
             </p>
@@ -440,6 +491,9 @@ function Macro() {
                       updateRuleValue(ruleIndex, { target: e.target.value })
                     }
                     placeholder="Find"
+                    overrides={{
+                      Root: { style: () => ({ borderRadius: "8px" }) },
+                    }}
                   ></Input>
                   <Input
                     value={rule.replacement}
@@ -448,12 +502,15 @@ function Macro() {
                         replacement: e.target.value,
                       })
                     }
+                    overrides={{
+                      Root: { style: () => ({ borderRadius: "8px" }) },
+                    }}
                     placeholder="Replace"
                   ></Input>
                   <Button
                     onClick={() => deleteRule(ruleIndex)}
                     kind={KIND.secondary}
-                    style={{ borderRadius: 0 }}
+                    // style={{ borderRadius: 0 }}
                   >
                     <Delete />
                   </Button>
