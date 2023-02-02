@@ -154,6 +154,17 @@ const RuleLine = styled("div", {
   gap: ".5em",
 });
 
+const TextareaPlaceholder = styled("div", {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%,-50%)",
+  fontSize: "24px",
+  color: "rgba(255, 255, 255, 0.5)",
+  userSelect: "none",
+  pointerEvents: "none",
+});
+
 function Macro() {
   {
     /* <CharWidget
@@ -265,10 +276,10 @@ function Macro() {
     ];
 
     for (let rule of customRulesCopy) {
-      newMacro = newMacro.replace(
-        new RegExp(rule.target, "g"),
-        rule.replacement
-      );
+      const expression = new RegExp(`\\b${rule.target}\\b`, "gm");
+      console.log(expression);
+
+      newMacro = newMacro.replace(expression, rule.replacement);
     }
 
     return newMacro;
@@ -312,6 +323,12 @@ function Macro() {
       ]);
     };
   }
+
+  const renderedMacro = memoRenderNewMacro(
+    macroCtn,
+    customRules,
+    rulePresets
+  ).trim();
 
   return (
     <Fragment>
@@ -362,7 +379,13 @@ function Macro() {
                 value={macroCtn}
                 onChange={(e) => setMacroCtn(e.target.value)}
                 overrides={macroEditorOverrides}
+                placeholder=""
               />
+              {macroCtn.trim().length < 1 && (
+                <TextareaPlaceholder>
+                  cute macro goes here 😄
+                </TextareaPlaceholder>
+              )}
             </MacroEditorContainer>
             {/* <ArrowRight
                 size={64}
@@ -383,41 +406,49 @@ function Macro() {
                 inputRef={macroPreviewRef}
                 overrides={macroEditorOverrides}
               />
+              {macroCtn.trim().length < 1 && (
+                <TextareaPlaceholder>
+                  👈 cute macro goes to my left
+                </TextareaPlaceholder>
+              )}
             </MacroEditorContainer>
           </div>
           <SidePanel>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                flexWrap: "wrap",
-                gap: ".5em",
-                justifyContent: "center",
-              }}
-            >
-              {new Array(
-                Math.ceil(
-                  memoRenderNewMacro(macroCtn, customRules, rulePresets)
-                    .trim()
-                    .match(/\n/gm)?.length / 15
-                ) | 0
-              )
-                .fill()
-                .map((_, i) => (
-                  <Button
-                    key={i}
-                    onClick={CopyNewMacro(i)}
-                    style={{ height: "2.5em", marginTop: "11px" }}
-                    startEnhancer={() => <FontAwesomeIcon icon={faCopy} />}
-                    title={`Copy Macro #${i + 1}`}
-                  >
-                    {i + 1}
-                  </Button>
-                ))}
-            </div>
-            <div
-              style={{ borderBottom: "1px solid #333", padding: "0.5em 0em" }}
-            ></div>
+            {renderedMacro.match(/\n/gm)?.length / 15 >= 1 && (
+              <>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                    gap: ".5em",
+                    justifyContent: "center",
+                  }}
+                >
+                  {new Array(
+                    Math.ceil(renderedMacro.match(/\n/gm)?.length / 15) || 0
+                  )
+                    .fill()
+                    .map((_, i) => (
+                      <Button
+                        key={i}
+                        onClick={CopyNewMacro(i)}
+                        style={{ height: "2.5em", marginTop: "11px" }}
+                        startEnhancer={() => <FontAwesomeIcon icon={faCopy} />}
+                        title={`Copy Macro #${i + 1}`}
+                      >
+                        {i + 1}
+                      </Button>
+                    ))}
+                </div>
+                <div
+                  style={{
+                    borderBottom: "1px solid #333",
+                    padding: "0.5em 0em",
+                  }}
+                ></div>
+              </>
+            )}
             <p
               style={{
                 paddingLeft: ".5em",
@@ -442,7 +473,7 @@ function Macro() {
                   overrides={{
                     BaseButton: {
                       style: () => ({
-                        flexGrow: "1",
+                        flexGrow: 1,
                       }),
                     },
                   }}
