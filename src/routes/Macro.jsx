@@ -379,7 +379,6 @@ function Macro() {
                 value={macroCtn}
                 onChange={(e) => setMacroCtn(e.target.value)}
                 overrides={macroEditorOverrides}
-                placeholder=""
               />
               {macroCtn.trim().length < 1 && (
                 <TextareaPlaceholder>
