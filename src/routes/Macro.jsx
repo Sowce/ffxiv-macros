@@ -51,7 +51,7 @@ const rulePresetsBase = [
 
 const SpecialChracterButton = (props) => {
   const ingameFontButtonStyle = {
-    fontFamily: "FFXIV, Noto Sans, Myriad Pro", // ＭＳ Ｐゴシック,
+    fontFamily: "Neo AXIS, FFXIV, Noto Sans, Myriad Pro", // ＭＳ Ｐゴシック,
     fontSize: "12px",
   };
 
@@ -120,9 +120,9 @@ const macroEditorOverrides = {
   Root: { style: () => ({ height: "100%", borderRadius: "8px" }) },
   Input: {
     style: () => ({
-      fontFamily: "Noto Sans, Myriad Pro, FFXIV", // ＭＳ Ｐゴシック,
+      fontFamily: "Neo AXIS", // ＭＳ Ｐゴシック,
       fontSize: "16px",
-      lineHeight: "18.5px",
+    //   lineHeight: "18.5px",
       overflowX: "normal",
       whiteSpace: "pre",
       overflowWrap: "normal",
@@ -358,11 +358,13 @@ function Macro() {
             >
               <p
                 style={{
+                  fontFamily: "Barlow",
                   textTransform: "uppercase",
-                  fontSize: "40px",
-                  fontWeight: "500",
+                  fontSize: "80px",
+                  fontWeight: "600",
                   color: "white",
                   margin: "0px",
+                  paddingBottom:"1rem",
                   textShadow:
                     "0 0 10px rgba(20,20,20,1), 0px 0px 10px rgba(20,20,20,1)",
                 }}
